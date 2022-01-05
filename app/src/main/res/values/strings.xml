@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Face500mg</string>
+    <string name="add_a_customer">Add a customer</string>
+    <string name="personal_info">Please enter the customers personal information</string>
+    <string name="please_enter_name">Please enter name</string>
+    <string name="please_enter_mobile_number">Please enter mobile number</string>
+    <string name="please_enter_valid_email">Please enter valid email</string>
+    <string name="please_enter_address">please enter address</string>
+    <string name="search_by_photo">Search by photo</string>
+    <string name="search_photo_decp">Please make sure your face is straight to your phone</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+    <string name="match_found">Match found</string>
+    <string name="matching_img">We have found some images matching with your face.</string>
+</resources>

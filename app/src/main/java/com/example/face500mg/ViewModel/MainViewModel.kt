@@ -1,50 +1,41 @@
 package com.example.face500mg.ViewModel
 
-import android.media.MediaMetadataRetriever
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+
 import com.example.face500mg.Repo.MainRepository
-import com.example.face500mg.data.Customer
 import com.example.face500mg.data.Data1
-import com.example.face500mg.data.data
+import com.example.face500mg.data.Data2
+import com.example.face500mg.data.Dummy
+
+//import com.example.face500mg.data.Statu
 import kotlinx.coroutines.*
+import okhttp3.Response
+import retrofit2.Call
+import javax.security.auth.callback.Callback
+import com.example.face500mg.data.Customer as Customer
 
-class MainViewModel constructor(private val mainRepository: MainRepository) : ViewModel() {
+class MainViewModel constructor(private val repository: MainRepository)  : ViewModel() {
 
+    val movieList = MutableLiveData<Dummy>()
     val errorMessage = MutableLiveData<String>()
-    val customelist = MutableLiveData<Customer>()
-    var job: Job? = null
 
-    val loading = MutableLiveData<Boolean>()
-//    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-//        onError("Exception handled: ${throwable.localizedMessage}")
-//    }
+    fun setCustomer(par: Data2) {
 
+        val response = repository.setAllCustomer(par)
+        response.enqueue(object : retrofit2.Callback<Dummy?> {
 
-    fun setCustomer(params: Data1) {
-        job = CoroutineScope(Dispatchers.IO /*+ exceptionHandler*/).launch {
-
-            val response = mainRepository.setAllCustomer(params)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    customelist.postValue(response.body())
-                    loading.value = false
-                } else {
-                    onError("Error : ${response.message()} ")
-                }
+            override fun onResponse(call: Call<Dummy?>, response: retrofit2.Response<Dummy?>) {
+                movieList.postValue(response.body())
             }
-        }
 
-    }
-
-    private fun onError(message: String) {
-        errorMessage.value = message
-        loading.value = false
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        job?.cancel()
+            override fun onFailure(call: Call<Dummy?>, t: Throwable) {
+                errorMessage.postValue(t.message)
+            }
+        })
     }
 
 }
+
+
+

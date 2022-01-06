@@ -1,10 +1,10 @@
 package com.example.face500mg.Repo
 
 import com.example.face500mg.Network.RestApiService
-import com.example.face500mg.data.Data1
+import com.example.face500mg.data.Data2
 
 class MainRepository constructor(private val retrofitService: RestApiService) {
 
-    suspend fun setAllCustomer(params:Data1) = retrofitService.setCustomer(params)
+    fun setAllCustomer(params: Data2) = retrofitService.setCustomer(params)
 
 }

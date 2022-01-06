@@ -10,6 +10,7 @@ import com.example.face500mg.R
 import com.example.face500mg.data.data
 import com.example.face500mg.databinding.MatchListBinding
 
+
 class SearchResultAdapter ( private var li: ArrayList<data>):
     RecyclerView.Adapter<MyViewHolder>() {
 //    private lateinit var mListener: onItemClickListener
@@ -22,7 +23,7 @@ class SearchResultAdapter ( private var li: ArrayList<data>):
 //        mListener=listener
 //    }
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding=MatchListBinding.bind(view)
+        val binding= MatchListBinding.bind(view)
         // var name: TextView = view.findViewById(R.id.tvTitle)
         //var collage: TextView = view.findViewById(R.id.tvFees)
 //        init {

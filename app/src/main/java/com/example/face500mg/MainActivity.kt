@@ -11,19 +11,23 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Patterns
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.face500mg.Network.RestApiService
 import com.example.face500mg.Repo.MainRepository
 import com.example.face500mg.ViewModel.MainViewModel
 import com.example.face500mg.ViewModel.MyViewModelFactory
-import com.example.face500mg.data.Data1
+import com.example.face500mg.data.Data2
 import com.example.face500mg.ui.SearchCustomer
 import com.google.android.material.navigation.NavigationView
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.PrintStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,6 +48,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepository)).get(MainViewModel::class.java)
+
+
+
 
         setEvent()
 
@@ -51,17 +59,18 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setEvent() {
-        viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepository)).get(MainViewModel::class.java)
-
-        viewModel.customelist.observe(this,{
-            it?.let{
-                Toast.makeText(this, "Staff updated successfully!", Toast.LENGTH_SHORT).show()
-               // viewModel.customelist
+        viewModel.movieList.observe(this, Observer {
+            if (it==null)
+            {
+                Toast.makeText(this,it?.status,Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"Failed",Toast.LENGTH_LONG).show()
             }
-
-
-
+            else {
+                Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
+            }
         })
+
+
 
 //        actionBarToggle = ActionBarDrawerToggle(this, drawerLayout, 0, 0)
 //        binding.dl.addDrawerListener(actionBarToggle)
@@ -122,24 +131,40 @@ class MainActivity : AppCompatActivity() {
         binding.submit.setOnClickListener {
             if(isDataValid())
             {
-                val params=Data1(
-                    referenceId = "IKTSTS",
-                    firstName = "Rishabh",
-                    middleName = "k",
-                    lastName = "singh",
-                    mobileNumber ="76365366363",
-                    emailAddress = "rishab@gmail.com",
-                    udf1 = "",
-                    udf2 = "",
-                    udf3 = "",
-                    udf4 = "",
-                    udf5 = "",
-                    timestamp = "2022-01-04 05:36:36",
-                    image_files = filesDir
+
+                val params= Data2(
+                    name = "Rishabh",
+                    salary = "2",
+                    age = "43",
+                    id = 838
+//                    referenceId = binding.lastName.text.toString(),
+//                    firstName = binding.name.text.toString(),
+//                    middleName = binding.midName.text.toString(),
+//                    lastName = binding.lastName.text.toString(),
+//                    mobileNumber =binding.number.text.toString(),
+//                    emailAddress = binding.emailId.text.toString(),
+//                    udf1 = "",
+//                    udf2 = "",
+//                    udf3 = "",
+//                    udf4 = "",
+//                    udf5 = "",
+//                    timestamp = "2022-01-04 05:36:36",
+//                    imageFiles = filesDir
+//                    imageFiles = arrayListOf(
+//                        ImageFiles(
+//                            id = 70,
+//                            filename="J",
+//                            tmpurl="https://idreambiz-face-compare.s3.amazonaws.com/vgg/79-profile.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAV2TMBLWR6IUB2PG2%2F20220105%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20220105T102340Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=512c16c095411b720fa185d190f56bb17ba24083bf3dae01f5a3cd0b25b84aea",
+//                            expires = null
+//
+//                        )
+//                    )
 
 
                 )
                 viewModel.setCustomer(params)
+                Log.d("x", "rishabh"+viewModel.setCustomer(params))
+
                 val intent = Intent(this, SearchCustomer::class.java)
                 startActivity(intent)
             }
@@ -164,22 +189,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isDataValid(): Boolean {
-
-        if (binding.name.text!!.isBlank()) {
-
-            binding.name.error = getString(R.string.please_enter_name)
-            return false
-        } else if (binding.number.text!!.length < 10) {
-
-            binding.number.error = getString(R.string.please_enter_mobile_number)
-            return false
-        }
-        else if (binding.emailId.text!!.isNotBlank() && !Patterns.EMAIL_ADDRESS.matcher(binding.emailId.text.toString())
-                .matches()) {
-            binding.emailId.error = getString(R.string.please_enter_valid_email)
-            return false
-        }
-        else if (binding.address.text!!.isBlank()) {
+//
+//        if (binding.name.text!!.isBlank()) {
+//
+//            binding.name.error = getString(R.string.please_enter_name)
+//            return false
+//        } else if (binding.number.text!!.length < 10) {
+//
+//            binding.number.error = getString(R.string.please_enter_mobile_number)
+//            return false
+//        }
+//        else if (binding.emailId.text!!.isNotBlank() && !Patterns.EMAIL_ADDRESS.matcher(binding.emailId.text.toString())
+//                .matches()) {
+//            binding.emailId.error = getString(R.string.please_enter_valid_email)
+//            return false
+//        }
+       if (binding.address.text!!.isBlank()) {
             binding.address.error = getString(R.string.please_enter_address)
             return false
         }

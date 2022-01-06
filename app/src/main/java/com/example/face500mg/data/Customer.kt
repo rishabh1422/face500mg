@@ -3,12 +3,11 @@ package com.example.face500mg.data
 import com.google.gson.annotations.SerializedName
 import java.io.File
 
-data class Customer (
-        @SerializedName("error" )
-        var error : Error? = Error()
-
-)
-    data class Error(
+//data class  Customer (
+//    @SerializedName("data" )
+//    var data : Statu? = Statu()
+//)
+    data class Customer(
         @SerializedName("code")
         var code: Int? = null,
         @SerializedName("type")
@@ -18,7 +17,6 @@ data class Customer (
         @SerializedName("data")
         var data: Data1? = Data1()
     )
-
     data class Data1(
         @SerializedName("reference_id")
         var referenceId: String? = null,
@@ -45,7 +43,19 @@ data class Customer (
         @SerializedName("timestamp")
         var timestamp: String? = null,
         @SerializedName("image_files")
-        var image_files: File?=null
+        var imageFiles: File?=null
+//        var imageFiles   : ArrayList<ImageFiles> = arrayListOf()
     )
+data class ImageFiles (
+    @SerializedName("id")
+    var id: Int?,
+    @SerializedName("filename")
+    var filename : String? = null,
+    @SerializedName("tmpurl")
+    var tmpurl   : String? = null,
+    @SerializedName("expires" )
+    var expires  : String? = null
+
+)
 
 

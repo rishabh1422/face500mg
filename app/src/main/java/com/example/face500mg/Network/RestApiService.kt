@@ -19,7 +19,7 @@ interface RestApiService {
     fun getImage(
         @Part target_image: MultipartBody.Part?
 
-    )
+    ): Call<ImageStatus?>
 
     @Multipart
     @POST("customers")

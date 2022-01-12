@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
             if (it == null) {
                 Toast.makeText(this, "Something went wong", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, "" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Sucess" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
             }
 
         })
@@ -354,14 +354,14 @@ class MainActivity : AppCompatActivity() {
 
             if (binding.name.text!!.isBlank()) {
 
-                binding.number.error = getString(R.string.please_enter_name)
+                binding.name.error = getString(R.string.please_enter_name)
 
 
                 return false
             }
         else if (binding.lastName.text!!.isBlank()) {
 
-            binding.number.error = getString(R.string.please_enter_last)
+            binding.lastName.error = getString(R.string.please_enter_last)
             return false
         }
             else if (binding.number.text!!.length < 10) {

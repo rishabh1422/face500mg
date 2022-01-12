@@ -11,6 +11,7 @@ import okhttp3.Callback
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import com.example.face500mg.data.Customer as Customer
 
 class MainViewModel constructor(private val repository: MainRepository)  : ViewModel() {
@@ -54,7 +55,25 @@ class MainViewModel constructor(private val repository: MainRepository)  : ViewM
         })
 
     }
+  fun setImage(target_image: MultipartBody.Part?)
+  {
+     val response=repository.getImage(target_image)
+      response.enqueue(object :retrofit2.Callback<ImageStatus?>
+      {
+          override fun onResponse(call: Call<ImageStatus?>, response: Response<ImageStatus?>) {
+              imagestatus.postValue(response.body())
+          }
 
+          override fun onFailure(call: Call<ImageStatus?>, t: Throwable) {
+
+              errorMessage.postValue(t.message)
+          }
+      })
+
+
+
+
+  }
 
     fun setData(par: MainActivity.PassD) {
 

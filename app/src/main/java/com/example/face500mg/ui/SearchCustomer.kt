@@ -6,6 +6,7 @@ import android.media.Image
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.face500mg.MainActivity
@@ -41,7 +42,20 @@ class SearchCustomer : AppCompatActivity() {
 
 
     private fun setEvent() {
-        viewModel.setCustomer
+        viewModel.imagestatus.observe(
+            this, Observer {
+                if (it==null)
+                {
+                    Toast.makeText(this, "Something went wrong" , Toast.LENGTH_LONG).show()
+
+                }
+                else
+                {
+                    Toast.makeText(this, "Data sent Success fully" + it?.data?.message, Toast.LENGTH_LONG).show()
+
+                }
+            }
+        )
         binding.camUpload.setOnClickListener {
             val intent = Intent()
             intent.type = "image/*"
@@ -50,10 +64,7 @@ class SearchCustomer : AppCompatActivity() {
 //                val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
 //                startActivityForResult(gallery, pickImage)
         }
-        binding.gallery.setOnClickListener {
-            val intent = Intent(this, SearchResult::class.java)
-            startActivity(intent)
-        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -72,12 +83,17 @@ class SearchCustomer : AppCompatActivity() {
                 binding.img.setImageURI(imageUri)
             }
         }
-        viewModel.imagestatus.observe(
-            this, Observer {
+        binding.gallery.setOnClickListener {
+            val intent = Intent(this, SearchResult::class.java)
+            startActivity(intent)
+            if(file22!=null) {
+                viewModel.setImage(file22)
 
             }
-        )
-        //viewModel.setImage(file22)
+        }
+
+
+
     }
 
 

@@ -4,22 +4,17 @@ import com.google.gson.annotations.SerializedName
 
 class Dummy(
 
-    @SerializedName("status" )
-    var status : String? = null,
-    @SerializedName("data"   )
-    var data   : Data2?   = Data2()
 
-)
+    @SerializedName("status")
+    var status  : String,
+    @SerializedName("data")
+    var data    : Responce,
+    @SerializedName("message" )
+    var message : String,
 
-data class Data2 (
-
-    @SerializedName("name")
-    var name   : String? = null,
-    @SerializedName("salary")
-    var salary : String? = null,
-    @SerializedName("age")
-    var age    : String? = null,
-    @SerializedName("id")
-    var id     : Int?    = null
-
+    )
+data class Responce
+    (
+    @SerializedName("id" )
+    var id : Int
 )

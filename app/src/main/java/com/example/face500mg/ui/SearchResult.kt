@@ -27,7 +27,11 @@ class SearchResult : AppCompatActivity() {
     }
 
     private fun setEvent() {
-        binding.age.setOnClickListener {
+        binding.last.setOnClickListener {
+            val intent = Intent(this, SearchCustomer::class.java)
+            startActivity(intent)
+        }
+        binding.moreInfo.setOnClickListener {
             val intent = Intent(this, CustomerInfoActivity::class.java)
             startActivity(intent)
         }
@@ -49,10 +53,15 @@ class SearchResult : AppCompatActivity() {
     }
 
     private fun result() {
-        var search= data("30% match")
+        var search= data("60% match")
         search1.add(search)
-        search = data("55% match")
+        search = data("70% match")
         search1.add(search)
+        search = data("80% match")
+        search1.add(search)
+        search = data("85% match")
+        search1.add(search)
+
 
     }
 }

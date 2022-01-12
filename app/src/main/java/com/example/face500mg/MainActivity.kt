@@ -1,5 +1,6 @@
 package com.example.face500mg
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -32,8 +33,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import java.io.PrintStream
-import android.R
-import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
@@ -41,6 +40,12 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.view.View
 import com.example.face500mg.ImageProcess.context
+import com.example.face500mg.data.data
+
+import android.graphics.Bitmap
+
+
+
 
 
 
@@ -98,23 +103,72 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setEvent() {
-        val file=File("")
+        binding.last.setOnClickListener {
+            val intent = Intent(this, SearchCustomer::class.java)
+            startActivity(intent)
+        }
+//        val file=File("")
 
 
+//        binding.camUpload.setOnClickListener {
+////
+//
+//
+//            ImageProcess.getInstanced(this).selectImage(this)
+////
+//        }
+        viewModel.gc.observe(this, Observer {
+            Toast.makeText(
+                this,
+                "sucess Rechived" + it?.data?.data?.emailAddress,
+                Toast.LENGTH_LONG
+            ).show()
+            Log.d("TAG", "rishabh" + it?.data?.data?.emailAddress)
+
+
+        })
+        viewModel.getCustomer1(cust_id)
+
+        viewModel.setCustomer.observe(this, {
+            if (it == null) {
+                Toast.makeText(this, "Something went wong", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
+            }
+
+        })
+        viewModel.sd.observe(this, androidx.lifecycle.Observer {
+            Toast.makeText(this, "sucess" + it?.data?.id, Toast.LENGTH_LONG).show()
+
+
+//            it?.data
+//            Log.d(TAG, "ruishabh"+it?.data)
+
+        })
+        viewModel.movieList.observe(this, Observer {
+            if (it == null) {
+
+                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
+            }
+        })
+        binding.gallery.setOnClickListener {
+            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            startActivityForResult(gallery, pickImage)
+        }
         binding.camUpload.setOnClickListener {
-//
 
-
-            ImageProcess.getInstanced(this).selectImage(this)
-//
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(cameraIntent, CAMERA_REQUEST)
         }
 
 
         binding.submit.setOnClickListener {
             if (isDataValid()) {
-                val ref = binding.address.text.toString()
+
                 val name = binding.name.text.toString()
-                val mid_name = binding.midName.text.toString()
+                val mid_name = "idm"
                 val lastName = binding.lastName.text.toString()
                 val mobileNumber = binding.number.text.toString()
                 val emailAddress = binding.emailId.text.toString()
@@ -124,6 +178,7 @@ class MainActivity : AppCompatActivity() {
                 val udf4 = ""
                 val udf5 = ""
                 val timestamp = "2022-01-04 05:36:36"
+                val ref = binding.address.text.toString()
                 val _ref: RequestBody = RequestBody.create(
                     MediaType.parse("text/plain"), ref
                 )
@@ -164,17 +219,17 @@ class MainActivity : AppCompatActivity() {
                     val jSONObject = JSONObject()
                     val arrayList = ArrayList<Any>()
                     try {
-                        jSONObject.put("reference_id", "lpuhums46y5")
+                        jSONObject.put("reference_id", ref)
                         arrayList.add("reference_id")
-                        jSONObject.put("first_name", "prachipathak")
+                        jSONObject.put("first_name", name)
                         arrayList.add("first_name")
-                        jSONObject.put("middle_name", "fgf")
+                        jSONObject.put("middle_name", mid_name)
                         arrayList.add("middle_name")
-                        jSONObject.put("last_name", "Testing")
+                        jSONObject.put("last_name", "idm")
                         arrayList.add("last_name")
-                        jSONObject.put("mobile_number", "9987774333")
+                        jSONObject.put("mobile_number", mobileNumber)
                         arrayList.add("mobile_number")
-                        jSONObject.put("email_address", "t@gmail.com")
+                        jSONObject.put("email_address", emailAddress)
                         arrayList.add("email_address")
                         jSONObject.put("udf_1", "")
                         arrayList.add("udf_1")
@@ -231,8 +286,8 @@ class MainActivity : AppCompatActivity() {
 //                    udf5 = _udf5,
 //                    timestamp = _time,
 //                    image_files = file22
-//
 //                )
+
 
 //                        referenceId = binding.address.text.toString(),
 //                        firstName = binding.name.text.toString(),
@@ -250,41 +305,20 @@ class MainActivity : AppCompatActivity() {
 
 //                viewModel.setCustomer(params)
 //                Log.d("x", "rishabh"+viewModel.setCustomer(params))
+                if (file22!=null) {
 
-                val intent = Intent(this, SearchCustomer::class.java)
-                startActivity(intent)
+                    val intent = Intent(this, SearchCustomer::class.java)
+                    startActivity(intent)
+                }
+                else
+                {
+                    Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
 
-        viewModel.gc.observe(this, Observer {
-            Toast.makeText(
-                this,
-                "sucess Rechived" + it?.data?.data?.emailAddress,
-                Toast.LENGTH_LONG
-            ).show()
-            Log.d("TAG", "rishabh" + it?.data?.data?.emailAddress)
 
-
-        })
-        viewModel.getCustomer1(cust_id)
-
-        viewModel.setCustomer.observe(this, {
-            if (it == null) {
-                Toast.makeText(this, "Something went wong", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
-            }
-
-        })
-        viewModel.sd.observe(this, androidx.lifecycle.Observer {
-            Toast.makeText(this, "sucess" + it?.data?.id, Toast.LENGTH_LONG).show()
-
-
-//            it?.data
-//            Log.d(TAG, "ruishabh"+it?.data)
-
-        })
 
         binding.img.setOnClickListener {
             val params = PassD(
@@ -292,9 +326,6 @@ class MainActivity : AppCompatActivity() {
                 salary = "7",
                 age = "6"
             )
-
-
-
             viewModel.setData(params)
 
         }
@@ -304,42 +335,54 @@ class MainActivity : AppCompatActivity() {
 //         it.data
 //        })
 //        viewModel.getCustomer(cust_id)
-        viewModel.movieList.observe(this, Observer {
-            if (it == null) {
 
-                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    private fun isDataValid(): Boolean {
+
+
+            if (binding.name.text!!.isBlank()) {
+
+                binding.number.error = getString(R.string.please_enter_name)
+
+
+                return false
             }
-        })
+        else if (binding.lastName.text!!.isBlank()) {
 
+            binding.number.error = getString(R.string.please_enter_last)
+            return false
+        }
+            else if (binding.number.text!!.length < 10) {
 
-
-
-
-
-
-
-        binding.camUpload.setOnClickListener {
-            if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(
-                    arrayOf(android.Manifest.permission.CAMERA),
-                    MY_CAMERA_PERMISSION_CODE
-                )
-            } else {
-                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(cameraIntent, CAMERA_REQUEST)
+           binding.number.error = getString(R.string.please_enter_mobile_number)
+                return false
             }
-        }
-        binding.gallery.setOnClickListener {
+            else if (binding.emailId.text!!.isNotBlank() && !Patterns.EMAIL_ADDRESS.matcher(binding.emailId.text.toString())
+                    .matches()) {
+          binding.emailId.error = getString(R.string.please_enter_valid_email)
+                return false
+            }
+            if (binding.address.text!!.isBlank()) {
+           binding.address.error = getString(R.string.please_enter_address)
+                return false
+            }
+            else
+            {
+                return true
+            }
 
-            val intent = Intent()
-            intent.type = "image/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"), pickImage)
-//                val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-//                startActivityForResult(gallery, pickImage)
-        }
 
 
     }
@@ -347,8 +390,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode) {
+            CAMERA_REQUEST -> {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    binding.img.setImageBitmap(data.extras?.get("data") as Bitmap)
+                }
+            }
+            else -> {
+                Toast.makeText(this, "Unrecognized request code", Toast.LENGTH_SHORT)
+            }
+        }
+//        if (resultCode== CAMERA_REQUEST)
+//        {
+//           binding.img.setImageBitmap(data?.extras?.get("data") as Bitmap)
+//
+//        }
         if (requestCode === pickImage) {
-            var imageUri = data?.data!!
+            imageUri = data?.data!!
             binding.img.setImageURI(imageUri)
 
             val uriPathHelper = URIPathHelper()
@@ -465,32 +523,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun isDataValid(): Boolean {
 
-        if (binding.name.text!!.isBlank()) {
-
-
-            return false
-        } else if (binding.number.text!!.length < 10) {
-
-//            binding.number.error = getString(R.string.please_enter_mobile_number)
-            return false
-        }
-        else if (binding.emailId.text!!.isNotBlank() && !Patterns.EMAIL_ADDRESS.matcher(binding.emailId.text.toString())
-                .matches()) {
-//            binding.emailId.error = getString(R.string.please_enter_valid_email)
-            return false
-        }
-       if (binding.address.text!!.isBlank()) {
-//            binding.address.error = getString(R.string.please_enter_address)
-            return false
-        }
-        else
-        {
-            return true
-        }
-
-    }
     data class PassD(
         @SerializedName("name")
         var name   : String,

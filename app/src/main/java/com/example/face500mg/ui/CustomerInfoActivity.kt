@@ -39,6 +39,10 @@ class CustomerInfoActivity : AppCompatActivity() {
     }
 
     private fun setEvent() {
+        binding.last.setOnClickListener {
+            val intent = Intent(this, SearchCustomer::class.java)
+            startActivity(intent)
+        }
         searchadapter= SearchResultAdapter(search1)
         val mLayoutManager = GridLayoutManager(this,  2)
         binding.recyMatch.layoutManager = mLayoutManager
@@ -56,11 +60,11 @@ class CustomerInfoActivity : AppCompatActivity() {
     }
 
     private fun result() {
-        var search= data("30% match")
+        var search= data("90% match")
         search1.add(search)
-        search = data("55% match")
+        search = data("80% match")
         search1.add(search)
-        search = data("56% match")
+        search = data("70% match")
         search1.add(search)
         search = data("56% match")
         search1.add(search)

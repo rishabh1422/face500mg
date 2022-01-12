@@ -5,7 +5,7 @@
     <string name="please_enter_name">Please enter name</string>
     <string name="please_enter_mobile_number">Please enter mobile number</string>
     <string name="please_enter_valid_email">Please enter valid email</string>
-    <string name="please_enter_address">please enter address</string>
+    <string name="please_enter_address">please enter Ref Id</string>
     <string name="search_by_photo">Search by photo</string>
     <string name="search_photo_decp">Please make sure your face is straight to your phone</string>
     <string name="nav_open">Open</string>
@@ -20,4 +20,6 @@
     <string name="forgot_password"> Forgot Password</string>
     <string name="please_enter_username">Plaese enter valid username</string>
     <string name="please_enter_password">please enter password</string>
+    <string name="please_enter_last">Please enter the last name</string>
+
 </resources>

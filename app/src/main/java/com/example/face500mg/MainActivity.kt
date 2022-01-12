@@ -36,9 +36,15 @@ import android.R
 import android.app.Activity
 import android.database.Cursor
 import android.view.View
+import com.example.face500mg.ImageProcess.context
 
-import com.example.face500mg.data.data
-import java.lang.Exception
+
+
+
+
+
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -72,7 +78,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        cust_id=11067
         viewModel = ViewModelProvider(
             this,
             MyViewModelFactory(mainRepository)
@@ -89,6 +94,9 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setEvent() {
+        val file=File("")
+
+
         binding.camUpload.setOnClickListener {
 //
 
@@ -335,29 +343,98 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        try {
+        if (requestCode === pickImage) {
+            imageUri = data?.data!!
 
-                if (requestCode === pickImage) {
+            val path=getPath(imageUri)
+            if(path!=null) {
+                val file = File(path)
 
-                    imageUri = data?.data!!
-                    binding.img.setImageURI(imageUri)
-
-                    // Get the path from the Uri
-                    val path: String = getPathFromURI(imageUri)
-                    if (path != null) {
-                        val f = File(path)
-                        imageUri = Uri.fromFile(f)
-                    }
-                    // Set the image in ImageView
-
-
-
+                val requestFile: RequestBody =
+                    RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                file22 =
+                    MultipartBody.Part.createFormData("image", file.name, requestFile)
             }
-        } catch (e: Exception) {
-            Log.e("FileSelectorActivity", "File select error", e)
+//            binding.img.setImageURI(imageUri)
+//
+//
+//            imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//            val cursor: Cursor?
+//            val columnIndexData: Int
+//            val listOfAllImages: MutableList<String> = mutableListOf()
+//            val projection = arrayOf(MediaStore.MediaColumns.DATA)
+//            var absolutePathOfImage: String
+//            cursor = this.contentResolver.query(imageUri, projection, null, null, null)
+//            if (cursor != null) {
+//                columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+//                while (cursor.moveToNext()) {
+//                    absolutePathOfImage = cursor.getString(columnIndexData)
+//                    listOfAllImages.add(absolutePathOfImage)
+//                }
+//                cursor.close()
+//            }
+
+//            val file = File(imageUri!!.path) //create path from uri
+//
+//            val split = file.path.split(":").toTypedArray() //split the path.
+//
+//            val filePath = split[1] //assign it to a string(your choice).
+//            val requestFile: RequestBody =
+//                            RequestBody.create(MediaType.parse("multipart/form-data"),file)
+//            file22 =
+//                            MultipartBody.Part.createFormData("image", file.name, requestFile)
+
+
+
+
         }
+    }
+
+    private fun getPath(imageUri: Uri): String? {
+        var result: String? = null
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(imageUri, proj, null, null, null)
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                val column_index = cursor.getColumnIndexOrThrow(proj[0])
+                result = cursor.getString(column_index)
+            }
+            cursor.close()
+        }
+        if (result == null) {
+            result = "Not found"
+        }
+        return result
 
     }
+//        try {
+//
+//                if (requestCode === pickImage) {
+//
+//                    imageUri = data?.data!!
+//                    binding.img.setImageURI(imageUri)
+//
+//                    // Get the path from the Uri
+//                    val path: String = getPathFromURI(imageUri)
+//                    if (path != null) {
+//                        val f = File(path)
+//                        imageUri = Uri.fromFile(f)
+//                        val requestFile: RequestBody =
+//                            RequestBody.create(MediaType.parse("multipart/form-data"), f)
+//                        file22 =
+//                            MultipartBody.Part.createFormData("image", f.name, requestFile)
+//
+//                    }
+//                    // Set the image in ImageView
+//
+//
+//
+//            }
+//        } catch (e: Exception) {
+//            Log.e("FileSelectorActivity", "File select error", e)
+//        }
+//
+//    }
 
     private fun getPathFromURI(imageUri: Uri): String {
         var res: String? = null

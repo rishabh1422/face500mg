@@ -215,78 +215,78 @@ class MainActivity : AppCompatActivity() {
                 val _time: RequestBody = RequestBody.create(
                     MediaType.parse("text/plain"), timestamp
                 )
-                Thread {
-                    val jSONObject = JSONObject()
-                    val arrayList = ArrayList<Any>()
-                    try {
-                        jSONObject.put("reference_id", ref)
-                        arrayList.add("reference_id")
-                        jSONObject.put("first_name", name)
-                        arrayList.add("first_name")
-                        jSONObject.put("middle_name", mid_name)
-                        arrayList.add("middle_name")
-                        jSONObject.put("last_name", "idm")
-                        arrayList.add("last_name")
-                        jSONObject.put("mobile_number", mobileNumber)
-                        arrayList.add("mobile_number")
-                        jSONObject.put("email_address", emailAddress)
-                        arrayList.add("email_address")
-                        jSONObject.put("udf_1", "")
-                        arrayList.add("udf_1")
-                        jSONObject.put("udf_2", "")
-                        arrayList.add("udf_2")
+//                Thread {
+//                    val jSONObject = JSONObject()
+//                    val arrayList = ArrayList<Any>()
+//                    try {
+//                        jSONObject.put("reference_id", ref)
+//                        arrayList.add("reference_id")
+//                        jSONObject.put("first_name", name)
+//                        arrayList.add("first_name")
+//                        jSONObject.put("middle_name", mid_name)
+//                        arrayList.add("middle_name")
+//                        jSONObject.put("last_name", "idm")
+//                        arrayList.add("last_name")
+//                        jSONObject.put("mobile_number", mobileNumber)
+//                        arrayList.add("mobile_number")
+//                        jSONObject.put("email_address", emailAddress)
+//                        arrayList.add("email_address")
+//                        jSONObject.put("udf_1", "")
+//                        arrayList.add("udf_1")
+//                        jSONObject.put("udf_2", "")
+//                        arrayList.add("udf_2")
+//
+//                        jSONObject.put("udf_3", "")
+//                        arrayList.add("udf_3")
+//                        jSONObject.put("udf_4", "")
+//                        arrayList.add("udf_4")
+//                        jSONObject.put("udf_5", "")
+//                        arrayList.add("udf_5")
+//
+//                        jSONObject.put("timestamp", "2022-01-04 05:36:36")
+//                        arrayList.add("timestamp")
+//                        jSONObject.put("image_files", file22)
+//                        arrayList.add("image_files")
+//
+//                    } catch (e: JSONException) {
+//                        e.printStackTrace()
+//                    }
+//                    val printStream: PrintStream = System.out
+//                    val sb3 = StringBuilder()
+//                    sb3.append("jsonParams ")
+//                    sb3.append(jSONObject.toString())
+//                    printStream.println(sb3.toString())
+//                    val postResponse: String = WebUtils.getPostResponse(
+//                        this@MainActivity,
+//                        arrayList,
+//                        jSONObject,
+//                        "http://15.207.87.74:8000/customers",
+//                        "",
+//                        ""
+//                    )
+//                    val printStream2: PrintStream = System.out
+//                    val sb4 = StringBuilder()
+//                    sb4.append("logingresponcr")
+//                    sb4.append(postResponse)
+//                    printStream2.println(sb4.toString())
+//                }.start()
+//                Log.d("TAG", "im" + file22)
 
-                        jSONObject.put("udf_3", "")
-                        arrayList.add("udf_3")
-                        jSONObject.put("udf_4", "")
-                        arrayList.add("udf_4")
-                        jSONObject.put("udf_5", "")
-                        arrayList.add("udf_5")
-
-                        jSONObject.put("timestamp", "2022-01-04 05:36:36")
-                        arrayList.add("timestamp")
-                        jSONObject.put("image_files", file22)
-                        arrayList.add("image_files")
-
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-                    val printStream: PrintStream = System.out
-                    val sb3 = StringBuilder()
-                    sb3.append("jsonParams ")
-                    sb3.append(jSONObject.toString())
-                    printStream.println(sb3.toString())
-                    val postResponse: String = WebUtils.getPostResponse(
-                        this@MainActivity,
-                        arrayList,
-                        jSONObject,
-                        "http://15.207.87.74:8000/customers",
-                        "",
-                        ""
-                    )
-                    val printStream2: PrintStream = System.out
-                    val sb4 = StringBuilder()
-                    sb4.append("logingresponcr")
-                    sb4.append(postResponse)
-                    printStream2.println(sb4.toString())
-                }.start()
-                Log.d("TAG", "im" + file22)
-
-//                viewModel.getCustomer(
-//                    referenceId = _ref,
-//                    firstName = r_name,
-//                    middleName = midname,
-//                    lastName = last_requestname,
-//                    mobileNumber = mob_requestname,
-//                    emailAddress = email_requestname,
-//                    udf1 = _udf1,
-//                    udf2 =_udf2,
-//                    udf3 = _udf3,
-//                    udf4 = _udf4,
-//                    udf5 = _udf5,
-//                    timestamp = _time,
-//                    image_files = file22
-//                )
+                viewModel.getCustomer(
+                    referenceId = _ref,
+                    firstName = r_name,
+                    middleName = midname,
+                    lastName = last_requestname,
+                    mobileNumber = mob_requestname,
+                    emailAddress = email_requestname,
+                    udf1 = _udf1,
+                    udf2 =_udf2,
+                    udf3 = _udf3,
+                    udf4 = _udf4,
+                    udf5 = _udf5,
+                    timestamp = _time,
+                    image_files = file22
+                )
 
 
 //                        referenceId = binding.address.text.toString(),
@@ -412,6 +412,7 @@ class MainActivity : AppCompatActivity() {
             val uriPathHelper = URIPathHelper()
             val filePath = uriPathHelper.getPath(this, imageUri)
             if(filePath!=null) {
+                binding.decp.text=filePath
                 val file = File(filePath)
 
                 val requestFile: RequestBody =

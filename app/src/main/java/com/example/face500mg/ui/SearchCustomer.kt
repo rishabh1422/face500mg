@@ -51,6 +51,7 @@ class SearchCustomer : AppCompatActivity() {
                 }
                 else
                 {
+                    binding.camUpload.text=it.data.data[0].filename
                     Toast.makeText(this, "Data sent Success fully" + it?.data?.message, Toast.LENGTH_LONG).show()
 
                 }

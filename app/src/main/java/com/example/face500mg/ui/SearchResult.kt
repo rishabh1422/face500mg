@@ -19,6 +19,7 @@ class SearchResult : AppCompatActivity() {
     private val search1= ArrayList<data>()
     private lateinit var searchadapter: SearchResultAdapter
     lateinit var binding: ActivitySearchResultBinding
+    var pickImage=1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivitySearchResultBinding.inflate(layoutInflater)
@@ -27,6 +28,13 @@ class SearchResult : AppCompatActivity() {
     }
 
     private fun setEvent() {
+        binding.status.setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), pickImage)
+
+        }
         binding.last.setOnClickListener {
             val intent = Intent(this, SearchCustomer::class.java)
             startActivity(intent)

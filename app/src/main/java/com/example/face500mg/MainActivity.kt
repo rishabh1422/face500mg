@@ -416,7 +416,7 @@ class MainActivity : AppCompatActivity() {
                 val file = File(filePath)
 
                 val requestFile: RequestBody =
-                    RequestBody.create(MediaType.parse("multipart/form-data"), file)
+                    RequestBody.create(MediaType.parse("image/*"), file)
                 file22 =
                     MultipartBody.Part.createFormData("image", file.name, requestFile)
             }

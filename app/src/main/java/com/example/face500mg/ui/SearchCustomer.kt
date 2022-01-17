@@ -78,9 +78,9 @@ class SearchCustomer : AppCompatActivity() {
             if (filePath!=null) {
                 val picture = File(filePath)
                 val requestFile: RequestBody =
-                    RequestBody.create(MediaType.parse("multipart/form-data"), picture)
+                    RequestBody.create(MediaType.parse("image/*"), picture)
                 file22 =
-                    MultipartBody.Part.createFormData("picture", picture.getName(), requestFile)
+                    MultipartBody.Part.createFormData("picture", picture.name, requestFile)
                 binding.img.setImageURI(imageUri)
             }
         }

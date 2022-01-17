@@ -2,7 +2,6 @@ package com.example.face500mg
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.net.http.RequestQueue
 import android.os.Build
@@ -29,31 +28,21 @@ import com.google.gson.annotations.SerializedName
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONException
-import org.json.JSONObject
 import java.io.File
-import java.io.PrintStream
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.os.Environment
 import android.provider.DocumentsContract
-import android.view.View
-import com.example.face500mg.ImageProcess.context
-import com.example.face500mg.data.data
 
 import android.graphics.Bitmap
-
-
-
-
-
-
-
-
-
-
-
+import android.graphics.BitmapFactory
+import android.util.Base64
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import java.io.PrintStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -66,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     val mainRepository = MainRepository(retrofitService)
     val MY_CAMERA_PERMISSION_CODE = 1
     val CAMERA_REQUEST = 2
+    var encodedImage: String?=null
     var file22: MultipartBody.Part? = null
     val pickImage = 100
     var path1 = "/storage/emulated/0/Download/Corrections 6.jpg"
@@ -133,7 +123,10 @@ class MainActivity : AppCompatActivity() {
             if (it == null) {
                 Toast.makeText(this, "Something went wong", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, "Sucess" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
+
+                val intent = Intent(this, SearchCustomer::class.java)
+                startActivity(intent)
+                Toast.makeText(this, "Success" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
             }
 
         })
@@ -306,9 +299,9 @@ class MainActivity : AppCompatActivity() {
 //                viewModel.setCustomer(params)
 //                Log.d("x", "rishabh"+viewModel.setCustomer(params))
                 if (file22!=null) {
-
-                    val intent = Intent(this, SearchCustomer::class.java)
-                    startActivity(intent)
+//
+//                    val intent = Intent(this, SearchCustomer::class.java)
+//                    startActivity(intent)
                 }
                 else
                 {
@@ -408,6 +401,9 @@ class MainActivity : AppCompatActivity() {
         if (requestCode === pickImage) {
             imageUri = data?.data!!
             binding.img.setImageURI(imageUri)
+//            val imageStream: InputStream? = contentResolver.openInputStream(imageUri)
+//            val selectedImage = BitmapFactory.decodeStream(imageStream)
+//           encodedImage = encodeImage(selectedImage)
 
             val uriPathHelper = URIPathHelper()
             val filePath = uriPathHelper.getPath(this, imageUri)
@@ -453,6 +449,15 @@ class MainActivity : AppCompatActivity() {
 
 
         }
+    }
+
+    private fun encodeImage(selectedImage: Bitmap?): String? {
+        val baos = ByteArrayOutputStream()
+        selectedImage?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b: ByteArray = baos.toByteArray()
+
+        return Base64.encodeToString(b, Base64.DEFAULT)
+
     }
 
     private fun getPath(imageUri: Uri): String? {

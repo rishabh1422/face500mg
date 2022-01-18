@@ -146,7 +146,7 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:layout_marginTop="10dp"
-            android:text="Active user"
+            android:text="Take Picture"
             android:background="@drawable/back"
             android:layout_marginStart="10dp"
             android:textColor="@color/white"

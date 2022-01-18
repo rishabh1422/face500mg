@@ -1,13 +1,19 @@
 package com.example.face500mg.Network
 
+import android.util.Log
 import com.example.face500mg.MainActivity
 import com.example.face500mg.data.*
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.*
+import okhttp3.ResponseBody.Companion.toResponseBody
+import okhttp3.internal.http2.ConnectionShutdownException
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import java.util.concurrent.TimeUnit
 
 interface RestApiService {
     @GET("customers/id/{cust_id}")
@@ -50,7 +56,6 @@ interface RestApiService {
         var retrofitService: RestApiService? = null
 
         fun getInstance(): RestApiService {
-
             val BASE_URL = "http://15.207.87.74:8000/"
             val BASE_URL1 = "http://dummy.restapiexample.com/"
 

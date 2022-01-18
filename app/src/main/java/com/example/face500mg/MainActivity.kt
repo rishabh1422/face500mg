@@ -43,6 +43,10 @@ import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.PrintStream
+import okhttp3.FormBody;
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody.Companion.asRequestBody
 
 
 class MainActivity : AppCompatActivity() {
@@ -93,6 +97,19 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setEvent() {
+
+        viewModel.setCustomer.observe(this, {
+            it?.data
+            if (it == null) {
+                Toast.makeText(this, "Something went wong", Toast.LENGTH_LONG).show()
+            } else {
+
+                val intent = Intent(this, SearchCustomer::class.java)
+                startActivity(intent)
+                Toast.makeText(this, "Success" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
+            }
+
+        })
         binding.last.setOnClickListener {
             val intent = Intent(this, SearchCustomer::class.java)
             startActivity(intent)
@@ -119,17 +136,6 @@ class MainActivity : AppCompatActivity() {
         })
         viewModel.getCustomer1(cust_id)
 
-        viewModel.setCustomer.observe(this, {
-            if (it == null) {
-                Toast.makeText(this, "Something went wong", Toast.LENGTH_LONG).show()
-            } else {
-
-                val intent = Intent(this, SearchCustomer::class.java)
-                startActivity(intent)
-                Toast.makeText(this, "Success" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
-            }
-
-        })
         viewModel.sd.observe(this, androidx.lifecycle.Observer {
             Toast.makeText(this, "sucess" + it?.data?.id, Toast.LENGTH_LONG).show()
 
@@ -173,42 +179,42 @@ class MainActivity : AppCompatActivity() {
                 val timestamp = "2022-01-04 05:36:36"
                 val ref = binding.address.text.toString()
                 val _ref: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), ref
+                    "text/plain".toMediaTypeOrNull(), ref
                 )
                 val r_name: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), name
+                    "text/plain".toMediaTypeOrNull(), name
                 )
                 val midname: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), mid_name
+                    "text/plain".toMediaTypeOrNull(), mid_name
                 )
                 val last_requestname: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), lastName
+                    "text/plain".toMediaTypeOrNull(), lastName
                 )
                 val mob_requestname: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), mobileNumber
+                    "text/plain".toMediaTypeOrNull(), mobileNumber
                 )
                 val email_requestname: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), emailAddress
+                    "text/plain".toMediaTypeOrNull(), emailAddress
                 )
                 val _udf1: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), udf1
+                    "text/plain".toMediaTypeOrNull(), udf1
                 )
                 val _udf2: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), udf2
+                    "text/plain".toMediaTypeOrNull(), udf2
                 )
                 val _udf3: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), udf3
+                    "text/plain".toMediaTypeOrNull(), udf3
                 )
                 val _udf4: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), udf4
+                    "text/plain".toMediaTypeOrNull(), udf4
                 )
                 val _udf5: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), udf5
+                    "text/plain".toMediaTypeOrNull(), udf5
                 )
                 val _time: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), timestamp
+                    "text/plain".toMediaTypeOrNull(), timestamp
                 )
-//                Thread {
+   //             Thread {
 //                    val jSONObject = JSONObject()
 //                    val arrayList = ArrayList<Any>()
 //                    try {
@@ -281,23 +287,6 @@ class MainActivity : AppCompatActivity() {
                     image_files = file22
                 )
 
-
-//                        referenceId = binding.address.text.toString(),
-//                        firstName = binding.name.text.toString(),
-//                        middleName = binding.midName.text.toString(),
-//                        lastName = binding.lastName.text.toString(),
-//                        mobileNumber =binding.number.text.toString(),
-//                        emailAddress = binding.emailId.text.toString(),
-//                        udf1 = "",
-//                        udf2 = "",
-//                        udf3 = "",
-//                        udf4 = "",
-//                        udf5 = "",
-//                        timestamp = "2022-01-04 05:36:36",
-
-
-//                viewModel.setCustomer(params)
-//                Log.d("x", "rishabh"+viewModel.setCustomer(params))
                 if (file22!=null) {
 //
 //                    val intent = Intent(this, SearchCustomer::class.java)
@@ -385,7 +374,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode) {
             CAMERA_REQUEST -> {
-                if (resultCode == Activity.RESULT_OK && data != null) {
+                if (resultCode == RESULT_OK && data != null) {
                     binding.img.setImageBitmap(data.extras?.get("data") as Bitmap)
                 }
             }
@@ -410,9 +399,8 @@ class MainActivity : AppCompatActivity() {
             if(filePath!=null) {
                 binding.decp.text=filePath
                 val file = File(filePath)
-
-                val requestFile: RequestBody =
-                    RequestBody.create(MediaType.parse("image/*"), file)
+//                val requestBody: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+                val requestFile: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
                 file22 =
                     MultipartBody.Part.createFormData("image", file.name, requestFile)
             }
@@ -451,14 +439,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun encodeImage(selectedImage: Bitmap?): String? {
-        val baos = ByteArrayOutputStream()
-        selectedImage?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val b: ByteArray = baos.toByteArray()
 
-        return Base64.encodeToString(b, Base64.DEFAULT)
-
-    }
 
     private fun getPath(imageUri: Uri): String? {
         var result: String? = null

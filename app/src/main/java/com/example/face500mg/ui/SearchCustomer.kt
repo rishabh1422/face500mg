@@ -17,8 +17,10 @@ import com.example.face500mg.ViewModel.MainViewModel
 import com.example.face500mg.ViewModel.MyViewModelFactory
 import com.example.face500mg.databinding.ActivitySearchcustomerBinding
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 class SearchCustomer : AppCompatActivity() {
@@ -77,8 +79,7 @@ class SearchCustomer : AppCompatActivity() {
             val filePath = uriPathHelper.getPath(this, imageUri)
             if (filePath!=null) {
                 val picture = File(filePath)
-                val requestFile: RequestBody =
-                    RequestBody.create(MediaType.parse("image/*"), picture)
+                val requestFile: RequestBody = picture.asRequestBody("image/*".toMediaTypeOrNull())
                 file22 =
                     MultipartBody.Part.createFormData("picture", picture.name, requestFile)
                 binding.img.setImageURI(imageUri)

@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.face500mg.MainActivity
 import com.example.face500mg.data.*
 import okhttp3.*
-import okhttp3.ResponseBody.Companion.toResponseBody
+
 import okhttp3.internal.http2.ConnectionShutdownException
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -24,7 +24,6 @@ interface RestApiService {
     @POST("customers/find")
     fun getImage(
         @Part target_image: MultipartBody.Part?=null
-
     ): Call<ImageStatus?>
 
     @Multipart

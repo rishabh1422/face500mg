@@ -20,8 +20,8 @@ class Login : AppCompatActivity() {
 
         binding.forgotPass.setOnClickListener {
 
-//            val intent= Intent(this,MainActivity::class.java)
-//            startActivity(intent)
+            val intent= Intent(this,MainActivity::class.java)
+            startActivity(intent)
         }
         binding.submit.setOnClickListener {
             if (isDatavald()) {

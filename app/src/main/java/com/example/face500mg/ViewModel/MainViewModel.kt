@@ -16,7 +16,7 @@ import com.example.face500mg.data.Customer as Customer
 
 class MainViewModel constructor(private val repository: MainRepository)  : ViewModel() {
 
-    val movieList = MutableLiveData<Customer?>()
+//    val movieList = MutableLiveData<Customer?>()
     val gc = MutableLiveData<CustomerResponce?>()
     val errorMessage = MutableLiveData<String>()
     val sd = MutableLiveData<Dummy?>()

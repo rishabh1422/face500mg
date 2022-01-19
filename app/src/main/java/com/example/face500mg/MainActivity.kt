@@ -1,5 +1,7 @@
 package com.example.face500mg
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -31,6 +33,7 @@ import okhttp3.RequestBody
 import java.io.File
 import android.content.ContentUris
 import android.content.Context
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Environment
 import android.provider.DocumentsContract
@@ -44,9 +47,12 @@ import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.PrintStream
 import okhttp3.FormBody;
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody.Companion.asRequestBody
+import androidx.core.app.ActivityCompat.startActivityForResult
+
+import androidx.core.app.ActivityCompat
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -144,17 +150,37 @@ class MainActivity : AppCompatActivity() {
 //            Log.d(TAG, "ruishabh"+it?.data)
 
         })
-        viewModel.movieList.observe(this, Observer {
-            if (it == null) {
-
-                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
-            }
-        })
+//        viewModel.movieList.observe(this, Observer {
+//            if (it == null) {
+//
+//                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show()
+//            } else {
+//                Toast.makeText(this, "Success", Toast.LENGTH_LONG).show()
+//            }
+//        })
         binding.gallery.setOnClickListener {
-            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery, pickImage)
+            try {
+                if (ActivityCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(
+                            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ),
+                        pickImage
+                    )
+                } else {
+                    val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                    startActivityForResult(gallery, pickImage)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
         }
         binding.camUpload.setOnClickListener {
 
@@ -179,40 +205,44 @@ class MainActivity : AppCompatActivity() {
                 val timestamp = "2022-01-04 05:36:36"
                 val ref = binding.address.text.toString()
                 val _ref: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), ref
+                    MediaType.parse("text/plain"),
+                    ref
                 )
+
                 val r_name: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), name
+                    MediaType.parse("text/plain"),
+                    name
                 )
                 val midname: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), mid_name
-                )
+                    MediaType.parse("text/plain"),
+                    mid_name)
                 val last_requestname: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), lastName
-                )
+                    MediaType.parse("text/plain"),
+                    lastName)
+
                 val mob_requestname: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), mobileNumber
+                    MediaType.parse("text/plain"), mobileNumber
                 )
                 val email_requestname: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), emailAddress
+                    MediaType.parse("text/plain"), emailAddress
                 )
-                val _udf1: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), udf1
+                val _udf1: RequestBody= RequestBody.create(
+                MediaType.parse("text/plain"), udf1
                 )
                 val _udf2: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), udf2
+                    MediaType.parse("text/plain"), udf2
                 )
                 val _udf3: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), udf3
+                    MediaType.parse("text/plain"), udf3
                 )
                 val _udf4: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), udf4
+                    MediaType.parse("text/plain"), udf4
                 )
                 val _udf5: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), udf5
+                    MediaType.parse("text/plain"), udf5
                 )
-                val _time: RequestBody = RequestBody.create(
-                    "text/plain".toMediaTypeOrNull(), timestamp
+                val _time:RequestBody = RequestBody.create(
+                    MediaType.parse("text/plain"), timestamp
                 )
    //             Thread {
 //                    val jSONObject = JSONObject()
@@ -271,20 +301,12 @@ class MainActivity : AppCompatActivity() {
 //                }.start()
 //                Log.d("TAG", "im" + file22)
 
-                viewModel.getCustomer(
-                    referenceId = _ref,
-                    firstName = r_name,
-                    middleName = midname,
-                    lastName = last_requestname,
-                    mobileNumber = mob_requestname,
-                    emailAddress = email_requestname,
-                    udf1 = _udf1,
-                    udf2 =_udf2,
-                    udf3 = _udf3,
-                    udf4 = _udf4,
-                    udf5 = _udf5,
-                    timestamp = _time,
-                    image_files = file22
+                viewModel.getCustomer(_ref,
+                    r_name, midname, last_requestname, mob_requestname,
+                    email_requestname,
+                   _udf1, _udf2, _udf3, _udf4, _udf5,
+                   _time,
+                    file22
                 )
 
                 if (file22!=null) {
@@ -400,9 +422,10 @@ class MainActivity : AppCompatActivity() {
                 binding.decp.text=filePath
                 val file = File(filePath)
 //                val requestBody: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-                val requestFile: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-                file22 =
-                    MultipartBody.Part.createFormData("image", file.name, requestFile)
+                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file
+                )
+
+                file22 = MultipartBody.Part.createFormData("image_files", file.name, requestFile)
             }
 //            binding.img.setImageURI(imageUri)
 //

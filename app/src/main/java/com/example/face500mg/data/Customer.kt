@@ -5,57 +5,57 @@ import java.io.File
 
 data class  Customer (
     @SerializedName("data" )
-    var data : Statu
+    var data : Statu?=null
 )
     data class Statu(
         @SerializedName("code")
-        var code: Int,
+        var code: Int?=null,
         @SerializedName("type")
-        var type: String,
+        var type: String?=null,
         @SerializedName("message")
-        var message: String,
+        var message: String?=null,
         @SerializedName("data")
         var data: Data1
     )
     data class Data1(
         @SerializedName("id")
-        var id: Int,
+        var id: Int?=null,
         @SerializedName("reference_id")
-        var referenceId: String,
+        var referenceId: String?=null,
         @SerializedName("first_name")
-        var firstName: String,
+        var firstName: String?=null,
         @SerializedName("middle_name")
-        var middleName: String,
+        var middleName: String?=null,
         @SerializedName("last_name")
-        var lastName: String,
+        var lastName: String?=null,
         @SerializedName("mobile_number")
-        var mobileNumber: String,
+        var mobileNumber: String?=null,
         @SerializedName("email_address")
-        var emailAddress: String,
+        var emailAddress: String?=null,
         @SerializedName("udf_1")
-        var udf1: String,
+        var udf1: String?=null,
         @SerializedName("udf_2")
-        var udf2: String,
+        var udf2: String?=null,
         @SerializedName("udf_3")
-        var udf3: String,
+        var udf3: String?=null,
         @SerializedName("udf_4")
-        var udf4: String,
+        var udf4: String?=null,
         @SerializedName("udf_5")
-        var udf5: String,
+        var udf5: String?=null,
         @SerializedName("timestamp")
-        var timestamp: String,
+        var timestamp: String?=null,
         @SerializedName("image_files")
-        var imageFiles: List<ImageFiles>
+        var imageFiles: List<ImageFiles>?=null
     )
 data class ImageFiles (
     @SerializedName("id")
-    var id: Int,
+    var id: Int?=null,
     @SerializedName("filename")
-    var filename : String,
+    var filename : String?=null,
     @SerializedName("tmpurl")
-    var tmpurl   : String,
+    var tmpurl   : String?=null,
     @SerializedName("expires" )
-    var expires  : String
+    var expires  : String?=null
 
 )
 

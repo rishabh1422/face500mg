@@ -22,11 +22,11 @@ import com.example.face500mg.ViewModel.MyViewModelFactory
 import com.example.face500mg.data.data
 import com.example.face500mg.databinding.ActivitySearchResultBinding
 import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+
 import okhttp3.MultipartBody
 import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
+
 import java.io.File
 import java.security.cert.LDAPCertStoreParameters
 
@@ -115,9 +115,9 @@ class SearchResult : AppCompatActivity() {
             val filePath = uriPathHelper.getPath(this, imageUri)
             if (filePath != null) {
                 val picture = File(filePath)
-                val requestFile: RequestBody = picture.asRequestBody("image/*".toMediaTypeOrNull())
-                file22 =
-                    MultipartBody.Part.createFormData("picture", picture.getName(), requestFile)
+//                val requestFile: RequestBody = picture.asRequestBody("image/*".toMediaTypeOrNull())
+//                file22 =
+//                    MultipartBody.Part.createFormData("picture", picture.getName(), requestFile)
 //                binding.img.setImageURI(imageUri)
             }
         }

@@ -8,7 +8,7 @@ import okhttp3.RequestBody
 
 class MainRepository constructor(private val retrofitService: RestApiService) {
 
-    fun getImage(target_image: MultipartBody.Part?) = retrofitService.getImage(target_image)
+    fun getImage(target_image: MultipartBody.Part?) = retrofitService. getImage(target_image)
     fun setAllCustomer(
         referenceId: RequestBody,
         firstName: RequestBody,

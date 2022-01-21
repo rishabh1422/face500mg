@@ -17,29 +17,13 @@ import com.example.face500mg.data.Customer as Customer
 class MainViewModel constructor(private val repository: MainRepository)  : ViewModel() {
 
 //    val movieList = MutableLiveData<Customer?>()
+    val showProgress: MutableLiveData<Boolean> = MutableLiveData()
     val gc = MutableLiveData<CustomerResponce?>()
     val errorMessage = MutableLiveData<String>()
     val sd = MutableLiveData<Dummy?>()
     val setCustomer = MutableLiveData<Customer?>()
     val imagestatus = MutableLiveData<ImageStatus?>()
 
-
-//fun getImage(target_image: MultipartBody.Part?) {
-//
-//    val response = repository.getImage(target_image)
-//    response.enqueue(object : retrofit2.Callback<ImageStatus?> {
-//
-//        override fun onResponse(call: Call<ImageStatus?>, response: retrofit2.Response<ImageStatus?>) {
-//
-//            imagestatus.postValue(response.body())
-//        }
-//
-//        override fun onFailure(call: Call<ImageStatus?>, t: Throwable) {
-//            errorMessage.postValue(t.message)
-//        }
-//    })
-//
-//}
     fun getCustomer1(cust_id:Int) {
 
         val response = repository.setAllCustomer(cust_id)
@@ -61,8 +45,13 @@ class MainViewModel constructor(private val repository: MainRepository)  : ViewM
       response.enqueue(object :retrofit2.Callback<ImageStatus?>
       {
           override fun onResponse(call: Call<ImageStatus?>, response: Response<ImageStatus?>) {
-              imagestatus.postValue(response.body())
-          }
+              showProgress.postValue(true)   // Show prgress bar when api call is active
+
+                  imagestatus.postValue(response.body())
+
+
+              }
+
 
           override fun onFailure(call: Call<ImageStatus?>, t: Throwable) {
 
@@ -88,19 +77,7 @@ class MainViewModel constructor(private val repository: MainRepository)  : ViewM
             }
         })
     }
-//    fun setImage(target_image: MultipartBody.Part?)
-//    {
-//        val response =repository.getImage(target_image)
-//        response.enqueue(object : retrofit2.Callback<ImageStatus?> {
-//            override fun onResponse(call: retrofit2.Call<ImageStatus?>, response: retrofit2.Response<ImageStatus?>) {
-//                imagestatus.postValue(response.body())
-//            }
-//
-//            override fun onFailure(call: retrofit2.Call<ImageStatus?>, t: Throwable) {
-//                errorMessage.postValue(t.message)
-//            }
-//        })
-//    }
+
     fun getCustomer(referenceId: RequestBody,
                     firstName: RequestBody,
                     middleName: RequestBody,

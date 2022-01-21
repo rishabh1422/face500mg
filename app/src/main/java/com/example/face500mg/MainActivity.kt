@@ -52,6 +52,9 @@ import okhttp3.OkHttpClient;
 import androidx.core.app.ActivityCompat.startActivityForResult
 
 import androidx.core.app.ActivityCompat
+import com.example.face500mg.ui.SearchResult
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.lang.Exception
 
 
@@ -103,6 +106,10 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setEvent() {
+        viewModel.errorMessage.observe(this, Observer {
+            Toast.makeText(this,"Network failed, Please try again",Toast.LENGTH_SHORT).show()
+
+        })
 
         viewModel.setCustomer.observe(this, {
             it?.data
@@ -110,14 +117,14 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Something went wong", Toast.LENGTH_LONG).show()
             } else {
 
-                val intent = Intent(this, SearchCustomer::class.java)
+                val intent = Intent(this, SearchResult::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "Success" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
             }
 
         })
         binding.last.setOnClickListener {
-            val intent = Intent(this, SearchCustomer::class.java)
+            val intent = Intent(this, SearchResult::class.java)
             startActivity(intent)
         }
 //        val file=File("")
@@ -205,44 +212,44 @@ class MainActivity : AppCompatActivity() {
                 val timestamp = "2022-01-04 05:36:36"
                 val ref = binding.address.text.toString()
                 val _ref: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"),
+                    "text/plain".toMediaTypeOrNull(),
                     ref
                 )
 
                 val r_name: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"),
+                    "text/plain".toMediaTypeOrNull(),
                     name
                 )
                 val midname: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"),
+                    "text/plain".toMediaTypeOrNull(),
                     mid_name)
                 val last_requestname: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"),
+                    "text/plain".toMediaTypeOrNull(),
                     lastName)
 
                 val mob_requestname: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), mobileNumber
+                    "text/plain".toMediaTypeOrNull(), mobileNumber
                 )
                 val email_requestname: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), emailAddress
+                    "text/plain".toMediaTypeOrNull(), emailAddress
                 )
                 val _udf1: RequestBody= RequestBody.create(
-                MediaType.parse("text/plain"), udf1
+                    "text/plain".toMediaTypeOrNull(), udf1
                 )
                 val _udf2: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), udf2
+                    "text/plain".toMediaTypeOrNull(), udf2
                 )
                 val _udf3: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), udf3
+                    "text/plain".toMediaTypeOrNull(), udf3
                 )
                 val _udf4: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), udf4
+                    "text/plain".toMediaTypeOrNull(), udf4
                 )
                 val _udf5: RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), udf5
+                    "text/plain".toMediaTypeOrNull(), udf5
                 )
                 val _time:RequestBody = RequestBody.create(
-                    MediaType.parse("text/plain"), timestamp
+                    "text/plain".toMediaTypeOrNull(), timestamp
                 )
    //             Thread {
 //                    val jSONObject = JSONObject()
@@ -311,8 +318,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (file22!=null) {
 //
-//                    val intent = Intent(this, SearchCustomer::class.java)
-//                    startActivity(intent)
+                    Toast.makeText(this,"Loading",Toast.LENGTH_LONG).show()
                 }
                 else
                 {
@@ -419,11 +425,10 @@ class MainActivity : AppCompatActivity() {
             val uriPathHelper = URIPathHelper()
             val filePath = uriPathHelper.getPath(this, imageUri)
             if(filePath!=null) {
-                binding.decp.text=filePath
+                //binding.decp.text=filePath
                 val file = File(filePath)
 //                val requestBody: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file
-                )
+                val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
 
                 file22 = MultipartBody.Part.createFormData("image_files", file.name, requestFile)
             }

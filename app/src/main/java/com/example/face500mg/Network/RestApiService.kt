@@ -51,6 +51,10 @@ interface RestApiService {
         @Body params: MainActivity.PassD
     ): Call<Dummy?>
     companion object {
+        val okHttpClient = OkHttpClient.Builder()
+            .readTimeout(120, TimeUnit.SECONDS)
+            .connectTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
 
         var retrofitService: RestApiService? = null
 
@@ -62,6 +66,7 @@ interface RestApiService {
                 val retrofit = Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
+                    .client(okHttpClient.build())
                     .build()
                 retrofitService = retrofit.create(RestApiService::class.java)
             }
@@ -69,3 +74,5 @@ interface RestApiService {
         }
     }
 }
+
+

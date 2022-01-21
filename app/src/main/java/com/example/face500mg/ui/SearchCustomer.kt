@@ -44,28 +44,11 @@ class SearchCustomer : AppCompatActivity() {
 
 
     private fun setEvent() {
-        viewModel.imagestatus.observe(
-            this, Observer {
-                if (it==null)
-                {
-                    Toast.makeText(this, "Something went wrong" , Toast.LENGTH_LONG).show()
 
-                }
-                else
-                {
-                    binding.camUpload.text=it.data.data[0].filename
-                    Toast.makeText(this, "Data sent Success fully" + it?.data?.message, Toast.LENGTH_LONG).show()
-
-                }
-            }
-        )
         binding.camUpload.setOnClickListener {
-            val intent = Intent()
-            intent.type = "image/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"), pickImage)
-//                val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-//                startActivityForResult(gallery, pickImage)
+            val intent = Intent(this, SearchResult::class.java)
+            startActivity(intent)
+
         }
 
     }
@@ -89,10 +72,10 @@ class SearchCustomer : AppCompatActivity() {
         binding.gallery.setOnClickListener {
             val intent = Intent(this, SearchResult::class.java)
             startActivity(intent)
-            if(file22!=null) {
-                viewModel.setImage(file22)
-
-            }
+//            if(file22!=null) {
+//                viewModel.setImage(file22)
+//
+//            }
         }
 
 

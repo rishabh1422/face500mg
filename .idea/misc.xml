@@ -8,17 +8,20 @@
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_date.xml" value="0.19166666666666668" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_dp.xml" value="0.19583333333333333" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_forgot_pass.xml" value="0.19166666666666668" />
+        <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_hamb.xml" value="0.19583333333333333" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1685185185185185" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_logo_image.xml" value="0.16296296296296298" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_mail.xml" value="0.19166666666666668" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_matchfound_tick.xml" value="0.19166666666666668" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_mob.xml" value="0.19166666666666668" />
+        <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/ic_search.xml" value="0.19583333333333333" />
+        <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/roundimage.xml" value="0.19583333333333333" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/shape_text.xml" value="0.1" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/drawable/shapetext.xml" value="0.1685185185185185" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/layout/activity_customer_info.xml" value="0.16666666666666666" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/layout/activity_login.xml" value="0.14666666666666667" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/layout/activity_main.xml" value="0.3279467680608365" />
-        <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/layout/activity_search_result.xml" value="0.22" />
+        <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/layout/activity_search_result.xml" value="0.1" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/layout/activity_searchcustomer.xml" value="0.17326732673267325" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="..\:/Idreambiz/Face500mg/app/src/main/res/layout/match_list.xml" value="0.17142857142857143" />

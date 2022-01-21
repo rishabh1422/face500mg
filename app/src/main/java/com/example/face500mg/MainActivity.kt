@@ -1,8 +1,5 @@
 package com.example.face500mg
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.net.http.RequestQueue
@@ -24,10 +21,8 @@ import com.example.face500mg.Repo.MainRepository
 import com.example.face500mg.ViewModel.MainViewModel
 import com.example.face500mg.ViewModel.MyViewModelFactory
 import com.example.face500mg.databinding.ActivityMainBinding
-import com.example.face500mg.ui.SearchCustomer
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.annotations.SerializedName
-import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -39,17 +34,6 @@ import android.os.Environment
 import android.provider.DocumentsContract
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.io.PrintStream
-import okhttp3.FormBody;
-
-import okhttp3.OkHttpClient;
-import androidx.core.app.ActivityCompat.startActivityForResult
 
 import androidx.core.app.ActivityCompat
 import com.example.face500mg.ui.SearchResult
@@ -137,17 +121,17 @@ class MainActivity : AppCompatActivity() {
 //            ImageProcess.getInstanced(this).selectImage(this)
 ////
 //        }
-        viewModel.gc.observe(this, Observer {
-            Toast.makeText(
-                this,
-                "sucess Rechived" + it?.data?.data?.emailAddress,
-                Toast.LENGTH_LONG
-            ).show()
-            Log.d("TAG", "rishabh" + it?.data?.data?.emailAddress)
-
-
-        })
-        viewModel.getCustomer1(cust_id)
+//        viewModel.gc.observe(this, Observer {
+//            Toast.makeText(
+//                this,
+//                "sucess Rechived" + it?.data?.data?.emailAddress,
+//                Toast.LENGTH_LONG
+//            ).show()
+//            Log.d("TAG", "rishabh" + it?.data?.data?.emailAddress)
+//
+//
+//        })
+//        viewModel.getCustomer1(cust_id)
 
         viewModel.sd.observe(this, androidx.lifecycle.Observer {
             Toast.makeText(this, "sucess" + it?.data?.id, Toast.LENGTH_LONG).show()

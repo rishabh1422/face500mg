@@ -7,7 +7,6 @@ import com.example.face500mg.Repo.MainRepository
 import com.example.face500mg.data.CustomerResponce
 import com.example.face500mg.data.Dummy
 import com.example.face500mg.data.ImageStatus
-import okhttp3.Callback
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -24,7 +23,7 @@ class MainViewModel constructor(private val repository: MainRepository)  : ViewM
     val setCustomer = MutableLiveData<Customer?>()
     val imagestatus = MutableLiveData<ImageStatus?>()
 
-    fun getCustomer1(cust_id:Int) {
+    fun getCustomer1(cust_id: Int) {
 
         val response = repository.setAllCustomer(cust_id)
         response.enqueue(object : retrofit2.Callback<CustomerResponce?> {

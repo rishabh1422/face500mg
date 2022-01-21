@@ -51,7 +51,7 @@ class SearchResult : AppCompatActivity() {
     lateinit var adapter: SearchResultDataAdapter
     var list: ArrayList<ImageInfor> = ArrayList()
     lateinit var viewModel: MainViewModel
-    private var selectPlan: List<ImageInfor> = ArrayList()
+    private lateinit var selectPlan: List<ImageInfor>
     val retrofitService = RestApiService.getInstance()
     val mainRepository = MainRepository(retrofitService)
     private lateinit var searchadapter: SearchResultAdapter
@@ -95,12 +95,12 @@ class SearchResult : AppCompatActivity() {
 //                binding.recyMatch.layoutManager = linearLayoutManager
 //                adapter = SearchResultDataAdapter(list)
 //                binding.recyMatch.adapter = adapter
-
-        Glide.with(this).load(it.data.data[0].tmpurl).into(binding.iv1)
-        Glide.with(this).load(it.data.data[1].tmpurl).into(binding.iv2)
-
-        binding.custId.text = "Customer Id" + it.data.data[0].custId.toString()
-        binding.custId2.text = "Customer Id" + it.data.data[1].custId.toString()
+if(it.data.data.size>0) {
+    Glide.with(this).load(it.data.data[0].tmpurl).into(binding.iv1)
+    Glide.with(this).load(it.data.data[1].tmpurl).into(binding.iv2)
+    binding.custId.text = it.data.data[0].custId.toString()
+    binding.custId2.text = it.data.data[1].custId.toString()
+}
 
 
         selectPlan = it.data.data
@@ -121,6 +121,23 @@ class SearchResult : AppCompatActivity() {
             viewModel.setImage(file22)
         }
 
+
+        binding.iv1.setOnClickListener {
+            val intent = Intent(this, CustomerInfoActivity::class.java)
+            val extras = Bundle()
+            extras.putString("StringVariableName", binding.custId.text.toString())
+            intent.putExtras(extras)
+
+            startActivity(intent)
+        }
+        binding.iv2.setOnClickListener {
+            val intent = Intent(this, CustomerInfoActivity::class.java)
+            val extras = Bundle()
+            extras.putString("StringVariableName", binding.custId2.text.toString())
+            intent.putExtras(extras)
+
+            startActivity(intent)
+        }
 
         binding.cusName.setOnClickListener {
             try {

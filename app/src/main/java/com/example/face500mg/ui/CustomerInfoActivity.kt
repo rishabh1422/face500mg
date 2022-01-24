@@ -1,6 +1,7 @@
 package com.example.face500mg.ui
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,7 @@ class CustomerInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityCustomerInfoBinding
     val retrofitService = RestApiService.getInstance()
     val mainRepository = MainRepository(retrofitService)
+    lateinit var imageUri: Uri
     //var cust_id:Int=11061
 
 //    val cust_id:Int=11067
@@ -40,7 +42,12 @@ class CustomerInfoActivity : AppCompatActivity() {
 //        cust_id=intent.getStringExtra("cust_Id")
         val extras = intent.extras
         val stringVariableName = extras!!.getString("StringVariableName")
+        imageUri = Uri.parse(extras.getString("imageUri"));
         cust_id = stringVariableName!!.toInt()
+        binding.iv.setImageURI(imageUri)
+
+
+
 
 //         =intent.getIntExtra("cust_Id",0)
 
@@ -57,12 +64,12 @@ class CustomerInfoActivity : AppCompatActivity() {
 
         viewModel.gc.observe(this, androidx.lifecycle.Observer {
 
-            binding.name.text="  "+it?.data?.data?.firstName
-            Glide.with(this).load(it?.data?.data?.imageFiles?.get(0)?.tmpurl).into(binding.iv)
-            binding.age.text=it?.data?.data?.mobileNumber
-            binding.custId.text="  "+it?.data?.data?.referenceId
-            binding.info.text="  "+it?.data?.data?.emailAddress
-            binding.cusName.text="  "+it?.data?.data?.timestamp
+            binding.cusName.text="  "+it?.data?.data?.firstName
+            Glide.with(this).load(it?.data?.data?.imageFiles?.get(0)?.tmpurl).into(binding.iv1)
+            binding.phoneNo.text=it?.data?.data?.mobileNumber
+            binding.cusRef.text="  "+it?.data?.data?.referenceId
+            binding.emailId.text="  "+it?.data?.data?.emailAddress
+            binding.timeSt.text="  "+it?.data?.data?.timestamp
 
 
 

@@ -21,5 +21,6 @@
     <string name="please_enter_username">Plaese enter valid username</string>
     <string name="please_enter_password">please enter password</string>
     <string name="please_enter_last">Please enter the last name</string>
+    <string name="selfie">Selfie</string>
 
 </resources>

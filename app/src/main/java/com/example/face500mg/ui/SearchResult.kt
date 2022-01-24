@@ -87,7 +87,7 @@ class SearchResult : AppCompatActivity() {
             if(it==null)
             {
 
-                    Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,"Match not found",Toast.LENGTH_SHORT).show()
             }
             else
             {
@@ -123,9 +123,11 @@ if(it.data.data.size>0) {
 
 
         binding.iv1.setOnClickListener {
+
             val intent = Intent(this, CustomerInfoActivity::class.java)
             val extras = Bundle()
             extras.putString("StringVariableName", binding.custId.text.toString())
+            intent.putExtra("imageUri", imageUri.toString())
             intent.putExtras(extras)
 
             startActivity(intent)
@@ -135,6 +137,7 @@ if(it.data.data.size>0) {
             val extras = Bundle()
             extras.putString("StringVariableName", binding.custId2.text.toString())
             intent.putExtras(extras)
+            intent .putExtra("KEY", imageUri);
 
             startActivity(intent)
         }
@@ -193,6 +196,7 @@ if(it.data.data.size>0) {
 //        search1.add(search)
 //
 //    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

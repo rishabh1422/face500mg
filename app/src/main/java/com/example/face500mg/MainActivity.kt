@@ -1,5 +1,6 @@
 package com.example.face500mg
 
+import android.R.attr
 import android.content.Intent
 import android.net.Uri
 import android.net.http.RequestQueue
@@ -25,7 +26,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.File
 import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
@@ -40,6 +40,20 @@ import com.example.face500mg.ui.SearchResult
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.lang.Exception
+
+import android.R.attr.bitmap
+import android.R.attr.bitmap
+import android.content.ContextWrapper
+import java.io.*
+import java.util.*
+import android.provider.MediaStore.Images
+
+
+
+
+
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -103,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
                 val intent = Intent(this, SearchResult::class.java)
                 startActivity(intent)
-                Toast.makeText(this, "Success" + it?.data?.data?.id, Toast.LENGTH_LONG).show()
+                Toast.makeText(this,  it?.data?.message, Toast.LENGTH_LONG).show()
             }
 
         })
@@ -111,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchResult::class.java)
             startActivity(intent)
         }
-//        val file=File("")
+
 
 
 //        binding.camUpload.setOnClickListener {
@@ -175,8 +189,12 @@ class MainActivity : AppCompatActivity() {
         }
         binding.camUpload.setOnClickListener {
 
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(cameraIntent, CAMERA_REQUEST)
+            if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(android.Manifest.permission.CAMERA), MY_CAMERA_PERMISSION_CODE)
+            } else {
+                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(cameraIntent, CAMERA_REQUEST)
+            }
         }
 
 
@@ -235,62 +253,6 @@ class MainActivity : AppCompatActivity() {
                 val _time:RequestBody = RequestBody.create(
                     "text/plain".toMediaTypeOrNull(), timestamp
                 )
-   //             Thread {
-//                    val jSONObject = JSONObject()
-//                    val arrayList = ArrayList<Any>()
-//                    try {
-//                        jSONObject.put("reference_id", ref)
-//                        arrayList.add("reference_id")
-//                        jSONObject.put("first_name", name)
-//                        arrayList.add("first_name")
-//                        jSONObject.put("middle_name", mid_name)
-//                        arrayList.add("middle_name")
-//                        jSONObject.put("last_name", "idm")
-//                        arrayList.add("last_name")
-//                        jSONObject.put("mobile_number", mobileNumber)
-//                        arrayList.add("mobile_number")
-//                        jSONObject.put("email_address", emailAddress)
-//                        arrayList.add("email_address")
-//                        jSONObject.put("udf_1", "")
-//                        arrayList.add("udf_1")
-//                        jSONObject.put("udf_2", "")
-//                        arrayList.add("udf_2")
-//
-//                        jSONObject.put("udf_3", "")
-//                        arrayList.add("udf_3")
-//                        jSONObject.put("udf_4", "")
-//                        arrayList.add("udf_4")
-//                        jSONObject.put("udf_5", "")
-//                        arrayList.add("udf_5")
-//
-//                        jSONObject.put("timestamp", "2022-01-04 05:36:36")
-//                        arrayList.add("timestamp")
-//                        jSONObject.put("image_files", file22)
-//                        arrayList.add("image_files")
-//
-//                    } catch (e: JSONException) {
-//                        e.printStackTrace()
-//                    }
-//                    val printStream: PrintStream = System.out
-//                    val sb3 = StringBuilder()
-//                    sb3.append("jsonParams ")
-//                    sb3.append(jSONObject.toString())
-//                    printStream.println(sb3.toString())
-//                    val postResponse: String = WebUtils.getPostResponse(
-//                        this@MainActivity,
-//                        arrayList,
-//                        jSONObject,
-//                        "http://15.207.87.74:8000/customers",
-//                        "",
-//                        ""
-//                    )
-//                    val printStream2: PrintStream = System.out
-//                    val sb4 = StringBuilder()
-//                    sb4.append("logingresponcr")
-//                    sb4.append(postResponse)
-//                    printStream2.println(sb4.toString())
-//                }.start()
-//                Log.d("TAG", "im" + file22)
 
                 viewModel.getCustomer(_ref,
                     r_name, midname, last_requestname, mob_requestname,
@@ -301,7 +263,7 @@ class MainActivity : AppCompatActivity() {
                 )
 
                 if (file22!=null) {
-//
+
                     Toast.makeText(this,"Loading",Toast.LENGTH_LONG).show()
                 }
                 else
@@ -325,10 +287,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-//        viewModel.gc.observe(this, Observer {
-//         it.data
-//        })
-//        viewModel.getCustomer(cust_id)
 
 
 
@@ -387,7 +345,24 @@ class MainActivity : AppCompatActivity() {
         when(requestCode) {
             CAMERA_REQUEST -> {
                 if (resultCode == RESULT_OK && data != null) {
-                    binding.img.setImageBitmap(data.extras?.get("data") as Bitmap)
+
+                    val photo = data.extras!!["data"] as Bitmap?
+                    binding.img.setImageBitmap(photo)
+                    val tempUri: Uri = getImageUri(applicationContext, photo)
+
+                    // CALL THIS METHOD TO GET THE ACTUAL PATH
+
+                    // CALL THIS METHOD TO GET THE ACTUAL PATH
+                    val finalFile = File(getRealPathFromURI(tempUri))
+//                    binding.decp.text=finalFile.absolutePath
+                        if(finalFile!=null) {
+                        //binding.decp.text=filePath
+
+//
+                        val requestFile = finalFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+                        file22 = MultipartBody.Part.createFormData("image_files", finalFile.absolutePath, requestFile)
+                    }
                 }
             }
             else -> {
@@ -416,41 +391,56 @@ class MainActivity : AppCompatActivity() {
 
                 file22 = MultipartBody.Part.createFormData("image_files", file.name, requestFile)
             }
-//            binding.img.setImageURI(imageUri)
-//
-//
-//            imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-//            val cursor: Cursor?
-//            val columnIndexData: Int
-//            val listOfAllImages: MutableList<String> = mutableListOf()
-//            val projection = arrayOf(MediaStore.MediaColumns.DATA)
-//            var absolutePathOfImage: String
-//            cursor = this.contentResolver.query(imageUri, projection, null, null, null)
-//            if (cursor != null) {
-//                columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
-//                while (cursor.moveToNext()) {
-//                    absolutePathOfImage = cursor.getString(columnIndexData)
-//                    listOfAllImages.add(absolutePathOfImage)
-//                }
-//                cursor.close()
-//            }
-
-//            val file = File(imageUri!!.path) //create path from uri
-//
-//            val split = file.path.split(":").toTypedArray() //split the path.
-//
-//            val filePath = split[1] //assign it to a string(your choice).
-//            val requestFile: RequestBody =
-//                            RequestBody.create(MediaType.parse("multipart/form-data"),file)
-//            file22 =
-//                            MultipartBody.Part.createFormData("image", file.name, requestFile)
-
+       
 
 
 
         }
     }
 
+    private fun getRealPathFromURI(tempUri: Uri): String {
+        var path = ""
+        if (contentResolver != null) {
+            val cursor = contentResolver.query(tempUri, null, null, null, null)
+            if (cursor != null) {
+                cursor.moveToFirst()
+                val idx = cursor.getColumnIndex(Images.ImageColumns.DATA)
+                path = cursor.getString(idx)
+                cursor.close()
+            }
+        }
+        return path!!
+
+    }
+
+    private fun getImageUri(applicationContext: Context?, photo: Bitmap?): Uri {
+        val bytes = ByteArrayOutputStream()
+        photo?.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path: String =
+            Images.Media.insertImage(applicationContext?.getContentResolver(), photo, "Title", null)
+        return Uri.parse(path)
+
+    }
+
+    private fun file(photo: Bitmap?) {
+        // Get the context wrapper
+//        val wrapper = ContextWrapper(applicationContext)
+//
+//        // Initialize a new file instance to save bitmap object
+//        var file = wrapper.getDir("Images",Context.MODE_PRIVATE)
+//        file = File(file,"${UUID.randomUUID()}.jpg")
+//
+//        try{
+//            // Compress the bitmap and save in jpg format
+//            val stream: OutputStream = FileOutputStream(file)
+//            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+//            stream.flush()
+//            stream.close()
+//        }catch (e:IOException){
+//            e.printStackTrace()
+//        }
+
+    }
 
 
     private fun getPath(imageUri: Uri): String? {

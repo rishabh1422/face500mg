@@ -1,16 +1,21 @@
 package com.example.face500mg.ui
 
 import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,6 +42,7 @@ import okhttp3.MultipartBody
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.ByteArrayOutputStream
 
 import java.io.File
 import java.lang.Exception
@@ -56,6 +62,8 @@ class SearchResult : AppCompatActivity() {
     val mainRepository = MainRepository(retrofitService)
     private lateinit var searchadapter: SearchResultAdapter
     lateinit var binding: ActivitySearchResultBinding
+    val CAMERA_REQUEST = 2
+    val MY_CAMERA_PERMISSION_CODE = 10
     var pickImage = 1
     var file22: MultipartBody.Part? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,8 +76,9 @@ class SearchResult : AppCompatActivity() {
         ).get(MainViewModel::class.java)
         setEvent()
     }
-
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun setEvent() {
+
         viewModel.showProgress.observe(this, Observer {
             progressBar?.visibility=
                 if (it)
@@ -92,6 +101,8 @@ class SearchResult : AppCompatActivity() {
             else
             {
 
+                binding.card2.visibility=View.VISIBLE
+                binding.card3.visibility=View.VISIBLE
 //                binding.recyMatch.layoutManager = linearLayoutManager
 //                adapter = SearchResultDataAdapter(list)
 //                binding.recyMatch.adapter = adapter
@@ -107,8 +118,7 @@ if(it.data.data.size>0) {
         binding.recyMatch.adapter = SearchResultDataAdapter(selectPlan)
 
                // pictures = it?.data?.data!![0].tmpurl
-
-                Toast.makeText(this, "success"+it.data, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "success"+it.data.message, Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -129,15 +139,15 @@ if(it.data.data.size>0) {
             extras.putString("StringVariableName", binding.custId.text.toString())
             intent.putExtra("imageUri", imageUri.toString())
             intent.putExtras(extras)
-
             startActivity(intent)
         }
         binding.iv2.setOnClickListener {
             val intent = Intent(this, CustomerInfoActivity::class.java)
             val extras = Bundle()
             extras.putString("StringVariableName", binding.custId2.text.toString())
+            intent.putExtra("imageUri", imageUri.toString())
             intent.putExtras(extras)
-            intent .putExtra("KEY", imageUri);
+//            intent .putExtra("KEY", imageUri);
 
             startActivity(intent)
         }
@@ -169,6 +179,14 @@ if(it.data.data.size>0) {
         binding.last.setOnClickListener {
             val intent = Intent(this, SearchCustomer::class.java)
             startActivity(intent)
+        }
+        binding.camera.setOnClickListener {
+            if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(android.Manifest.permission.CAMERA), MY_CAMERA_PERMISSION_CODE)
+            } else {
+                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(cameraIntent, CAMERA_REQUEST)
+            }
         }
         binding.moreInfo.setOnClickListener {
             val intent = Intent(this, CustomerInfoActivity::class.java)
@@ -214,7 +232,57 @@ if(it.data.data.size>0) {
 
             }
         }
+        when(requestCode) {
+            CAMERA_REQUEST -> {
+                if (resultCode == RESULT_OK && data != null) {
 
+                    val photo = data.extras!!["data"] as Bitmap?
+                    binding.iv.setImageBitmap(photo)
+                    val tempUri: Uri = getImageUri(applicationContext, photo)
+
+                    // CALL THIS METHOD TO GET THE ACTUAL PATH
+
+                    // CALL THIS METHOD TO GET THE ACTUAL PATH
+                    val finalFile = File(getRealPathFromURI(tempUri))
+//                    binding.decp.text=finalFile.absolutePath
+                    if(finalFile!=null) {
+                        //binding.decp.text=filePath
+
+//
+                        val requestFile = finalFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+                        file22 = MultipartBody.Part.createFormData("image_files", finalFile.absolutePath, requestFile)
+                    }
+                }
+            }
+            else -> {
+                Toast.makeText(this, "Unrecognized request code", Toast.LENGTH_SHORT)
+            }
+        }
+
+    }
+
+    private fun getRealPathFromURI(tempUri: Uri): String {
+        var path = ""
+        if (contentResolver != null) {
+            val cursor = contentResolver.query(tempUri, null, null, null, null)
+            if (cursor != null) {
+                cursor.moveToFirst()
+                val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+                path = cursor.getString(idx)
+                cursor.close()
+            }
+        }
+        return path!!
+
+    }
+
+    private fun getImageUri(applicationContext: Context?, photo: Bitmap?): Uri {
+        val bytes = ByteArrayOutputStream()
+        photo?.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path: String =
+            MediaStore.Images.Media.insertImage(applicationContext?.getContentResolver(), photo, "Title", null)
+        return Uri.parse(path)
 
     }
 }

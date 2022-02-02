@@ -1,6 +1,5 @@
 package com.example.face500mg.Adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +8,8 @@ import com.example.face500mg.data.ImageInfor
 import com.example.face500mg.databinding.MatchListBinding
 
 class SearchResultDataAdapter(
-    private var plans: List<ImageInfor>
+    private var plans: List<ImageInfor>,
+    var listiner: OnClick
 ) :
     RecyclerView.Adapter<SearchResultDataAdapter.ViewHolder>() {
 
@@ -36,6 +36,10 @@ class SearchResultDataAdapter(
 
         val data = plans[position]
         Glide.with(holder.itemView.context).load(data.tmpurl).into(holder.binding.iv)
+        holder.binding.mp.text=data.custId.toString()
+        holder.itemView.setOnClickListener {
+            listiner.onClick(data.custId)
+        }
 
 
     }
@@ -43,5 +47,7 @@ class SearchResultDataAdapter(
     override fun getItemCount(): Int {
         return plans.size
     }
-
+    interface OnClick {
+        fun onClick(data: Int)
+    }
     }

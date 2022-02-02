@@ -83,8 +83,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/username"
                     android:layout_width="match_parent"
+                    android:text="Face500mg"
                     android:layout_height="wrap_content"
-                    android:hint="@string/username"/>
+                    />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 app:layout_constraintTop_toBottomOf="@+id/text_input_layout_name"
@@ -101,7 +102,7 @@
                     android:inputType="textPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password"/>
+                    android:text="India@2022"/>
             </com.google.android.material.textfield.TextInputLayout>
             <TextView
                 android:id="@+id/submit"

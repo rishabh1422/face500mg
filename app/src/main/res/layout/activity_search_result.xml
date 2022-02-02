@@ -67,7 +67,6 @@
         app:layout_goneMarginBottom="20sp"
         android:layout_marginEnd="1dp"
         android:layout_marginStart="1dp"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/decp_"
@@ -81,7 +80,6 @@
         android:layout_marginEnd="1dp"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="1dp"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 <androidx.cardview.widget.CardView

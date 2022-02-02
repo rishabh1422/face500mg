@@ -364,38 +364,39 @@ class MainActivity : AppCompatActivity() {
                         file22 = MultipartBody.Part.createFormData("image_files", finalFile.absolutePath, requestFile)
                     }
                 }
+
             }
             else -> {
                 Toast.makeText(this, "Unrecognized request code", Toast.LENGTH_SHORT)
             }
         }
-//        if (resultCode== CAMERA_REQUEST)
-//        {
-//           binding.img.setImageBitmap(data?.extras?.get("data") as Bitmap)
-//
-//        }
+
         if (requestCode === pickImage) {
-            imageUri = data?.data!!
-            binding.img.setImageURI(imageUri)
+            if (resultCode == RESULT_OK) {
+                imageUri = data?.data!!
+                binding.img.setImageURI(imageUri)
 //            val imageStream: InputStream? = contentResolver.openInputStream(imageUri)
 //            val selectedImage = BitmapFactory.decodeStream(imageStream)
 //           encodedImage = encodeImage(selectedImage)
 
-            val uriPathHelper = URIPathHelper()
-            val filePath = uriPathHelper.getPath(this, imageUri)
-            if(filePath!=null) {
-                //binding.decp.text=filePath
-                val file = File(filePath)
+                val uriPathHelper = URIPathHelper()
+                val filePath = uriPathHelper.getPath(this, imageUri)
+                if (filePath != null) {
+                    //binding.decp.text=filePath
+                    val file = File(filePath)
 //                val requestBody: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-                val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
 
-                file22 = MultipartBody.Part.createFormData("image_files", file.name, requestFile)
+                    file22 =
+                        MultipartBody.Part.createFormData("image_files", file.name, requestFile)
+                }
             }
-       
-
-
-
+       else if (resultCode== RESULT_CANCELED)
+            {
+                Toast.makeText(this,"Please select image",Toast.LENGTH_SHORT).show()
+            }
         }
+
     }
 
     private fun getRealPathFromURI(tempUri: Uri): String {
@@ -417,7 +418,7 @@ class MainActivity : AppCompatActivity() {
         val bytes = ByteArrayOutputStream()
         photo?.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path: String =
-            Images.Media.insertImage(applicationContext?.getContentResolver(), photo, "Title", null)
+            Images.Media.insertImage(applicationContext?.getContentResolver(), photo, "IMG_" + Calendar.getInstance().getTime(), null)
         return Uri.parse(path)
 
     }
